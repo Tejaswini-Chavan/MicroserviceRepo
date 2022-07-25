@@ -9,3 +9,7 @@ spring:
           uri: lb://OrderServiceMS
           predicates:
             - Path=/app/**
+        - id: OrderServiceConsumerMS
+          uri: lb://OrderServiceConsumerMS
+          predicates:
+            - Path=/consumer/**
