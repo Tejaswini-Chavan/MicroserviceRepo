@@ -17,11 +17,7 @@ import java.util.Map;
 public class ProducerConfig {
     @Bean
     public ProducerFactory<String, Order> producerOrderFactory(){
-        Map<String, Object> config = new HashMap<>();
-        config.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
-        config.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        config.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(config);
+        return new DefaultKafkaProducerFactory<>(createConfig());
     }
 
 
@@ -32,17 +28,22 @@ public class ProducerConfig {
 
     @Bean
     public ProducerFactory<String, User> producerUserFactory(){
-        Map<String, Object> config = new HashMap<>();
-        config.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
-        config.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        config.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(config);
+        return new DefaultKafkaProducerFactory<>(createConfig());
     }
 
 
     @Bean
     public KafkaTemplate<String, User> kafkaUserTemplate(){
         return new KafkaTemplate<>(producerUserFactory());
+    }
+
+    @Bean
+    public Map<String, Object> createConfig(){
+        Map<String, Object> config = new HashMap<>();
+        config.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+        config.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return config;
     }
 }
 

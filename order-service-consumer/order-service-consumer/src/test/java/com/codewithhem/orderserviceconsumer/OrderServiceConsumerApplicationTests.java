@@ -52,21 +52,12 @@ class OrderServiceConsumerApplicationTests {
 		Assertions.assertDoesNotThrow(()->{});
 	}
 
-	/*@Test
-	@org.junit.jupiter.api.Order(3)
-	void listenOrderNotificationFailedOrderTest(){
-		order.setOrderAmount(200);
-		Mockito.when(orderCRUD.save(Mockito.any(Order.class))).thenReturn(order);
-		Mockito.when(userCRUD.findById(order.getUserId())).thenReturn(Optional.of(user));
-		Assertions.assertEquals("FAILED", orderNotification.listenOrderNotification(order).getStatus());
-	}*/
 	@Test
 	@org.junit.jupiter.api.Order(2)
-	void listenOrderNotificationSuccessOrderTest(){
+	void listenOrderNotificationOrderTest(){
 		order.setOrderAmount(50);
 		Mockito.when(orderCRUD.save(Mockito.any(Order.class))).thenReturn(order);
 		Mockito.when(userCRUD.findById(order.getUserId())).thenReturn(Optional.of(user));
-//		Assertions.assertEquals("SUCCESS", orderNotification.listenOrderNotification(order).getStatus());
 		Assertions.assertEquals(50, orderNotification.setUserBalance(user, order.getOrderAmount()).getBalance());
 	}
 

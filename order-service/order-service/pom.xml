@@ -133,9 +133,9 @@
  
 
                             <dataFile>target/jacoco.exec</dataFile>
-                            <sourceDirectory>src/main/java</sourceDirectory>
+							<sourceDirectory>src/main/java</sourceDirectory>
                             <!-- Sets the output directory for the code coverage report. -->
-                            <outputDirectory>target/my-reports</outputDirectory>
+							<outputDirectory>target/my-reports</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

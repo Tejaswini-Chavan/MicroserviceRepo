@@ -9,6 +9,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class OrderNotification {
 
@@ -25,7 +27,10 @@ public class OrderNotification {
 
     @KafkaListener(topics = "OrderTopic", groupId= "group_order" , containerFactory = "orderKafkaListenerFactory")
     public Order listenOrderNotification(Order order) {
-        User user = userCRUD.findById(order.getUserId()).get();
+        Optional<User> optional = userCRUD.findById(order.getUserId());
+        User user = new User();
+        if(optional.isPresent())
+            user = optional.get();
         if (user.getBalance() > order.getOrderAmount()) {
             this.setUserBalance(user, order.getOrderAmount());
             order.setStatus("SUCCESS");
