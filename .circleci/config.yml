@@ -47,6 +47,7 @@ jobs:
             ./cc-test-reporter upload-coverage -i coverage/codeclimate.total.json
 
 # Invoke jobs via workflows
+
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   build-workflow:
