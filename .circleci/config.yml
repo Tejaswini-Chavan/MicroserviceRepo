@@ -5,22 +5,49 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  build:
+    environment:
+      CC_TEST_REPORTER_ID: 4401afb6199bcec0e65b9cf1884d07556e0189a2d972aaea07fa61881868759d
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: "cimg/openjdk:11.0-browsers"
+    working_directory: ~/repo
     steps:
       - checkout
+      #- run:
+      #    name: Setup dependencies
+      #    command: |
+      #      sudo composer self-update
+      #      composer install -n --prefer-dist
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          name: Run Tests
+          command: |
+           
+            ./cc-test-reporter before-build
+            #sudo vendor/bin/phpunit --coverage-clover clover.xml
+            #cd ./XmartApp/XmartApp
+            mvn -f ./order-service/order-service/pom.xml test
+            mvn -f ./order-service-consumer/order-service-consumer/pom.xml test
+      - store_artifacts:
+          path: target
+      - run:
+          name: "Sum Test Coverage"
+          command: |
+            JACOCO_SOURCE_PATH=/home/circleci/repo/order-service/order-service/src/main/java ./cc-test-reporter \
+              format-coverage order-service/order-service/target/my-reports/jacoco.xml --input-type jacoco --output coverage/codeclimate.order_service.json
+            JACOCO_SOURCE_PATH=/home/circleci/repo/order-service-consumer/order-service-consumer/src/main/java ./cc-test-reporter \
+              format-coverage order-service-consumer/order-service-consumer/target/my-reports/jacoco.xml --input-type jacoco --output coverage/codeclimate.order_service_consumer.json
+            ./cc-test-reporter sum-coverage coverage/codeclimate.*.json -p 2 -o coverage/codeclimate.total.json
+            find .
+            ./cc-test-reporter upload-coverage -i coverage/codeclimate.total.json
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  build-workflow:
     jobs:
-      - say-hello
+      - build
