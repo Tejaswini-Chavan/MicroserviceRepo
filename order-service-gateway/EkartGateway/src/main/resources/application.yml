@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: OrderServiceMS
+          uri: lb://OrderServiceMS
+          predicates:
+            - Path=/app/**

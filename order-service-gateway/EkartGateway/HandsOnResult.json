@@ -1,0 +1,68 @@
+{
+  "testCaseReports": [
+    {
+      "cadre": "Micro Service",
+      "group": "Gateway",
+      "testClass": "GatewayRouting",
+      "testCaseID": "MSTC1-GatewayRouting.pathRouteWorksNoRouthFound",
+      "testCaseName": "Verifying the content of path route works no routh found",
+      "result": "Fail",
+      "reasonForFailure": "java.net.ConnectException"
+    },
+    {
+      "cadre": "Micro Service",
+      "group": "Gateway",
+      "testClass": "GatewayRouting",
+      "testCaseID": "MSTC2-GatewayRouting.pathRouteWorksForCustomerCartGetCustomerCart",
+      "testCaseName": "Verifying the content of path route works for customer cart get customer cart",
+      "result": "Fail",
+      "reasonForFailure": "java.net.ConnectException"
+    },
+    {
+      "cadre": "Micro Service",
+      "group": "Gateway",
+      "testClass": "GatewayRouting",
+      "testCaseID": "XMSTC3-GatewayRouting.serverApplicationName",
+      "testCaseName": "Verifying the content of server application name",
+      "testCaseDescription": "Expecting Server port number to be 400 in bootsrap yaml",
+      "result": "Pass"
+    },
+    {
+      "cadre": "Micro Service",
+      "group": "Gateway",
+      "testClass": "GatewayRouting",
+      "testCaseID": "MSTC4-GatewayRouting.routesPopulatedInApplicationYAML",
+      "testCaseName": "Verifying the content of routes populated in application y a m l",
+      "testCaseDescription": "Expecting  routes in application Yaml",
+      "result": "Fail",
+      "reasonForFailure": "org.opentest4j.AssertionFailedError: expected: <true> but was: <false>"
+    },
+    {
+      "cadre": "Micro Service",
+      "group": "Gateway",
+      "testClass": "GatewayRouting",
+      "testCaseID": "MSTC5-GatewayRouting.pathRouteWorksNoMethodFound",
+      "testCaseName": "Verifying the content of path route works no method found",
+      "result": "Fail",
+      "reasonForFailure": "java.net.ConnectException"
+    },
+    {
+      "cadre": "Micro Service",
+      "group": "ServiceDiscovery",
+      "testClass": "ServiceRegistry",
+      "testCaseID": "XMSTC1-ServiceRegistry.serverApplicationName",
+      "testCaseName": "Verifying the content of server application name",
+      "testCaseDescription": "Expecting Server Application Name to be EkartGateway in bootsrap yaml",
+      "result": "Pass"
+    },
+    {
+      "cadre": "Micro Service",
+      "group": "ServiceDiscovery",
+      "testClass": "ServiceRegistry",
+      "testCaseID": "MSTC2-ServiceRegistry.serviceResgistry",
+      "testCaseName": "Verifying the content of service resgistry",
+      "result": "Fail",
+      "reasonForFailure": "java.net.ConnectException"
+    }
+  ]
+}
