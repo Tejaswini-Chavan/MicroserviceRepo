@@ -13,3 +13,4 @@ spring:
           uri: lb://OrderServiceConsumerMS
           predicates:
             - Path=/consumer/**
+
