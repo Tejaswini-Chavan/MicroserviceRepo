@@ -1,0 +1,61 @@
+version: '3'
+services:
+  consul:
+    image: consul:latest
+    container_name: consul
+    ports:
+      - "8500:8500"
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      HOSTNAME_COMMAND: "ifconfig eth0 | grep 'inet' | cut -d: -f2 | awk '{ print $$2}'"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "OrderTopic:1:1,UserTopic:1:1,RevOrderTopic:1:1,RevUserTopic:1:1"
+  order-service-img:
+    image: hemantv9/order-service-app:latest
+    container_name: order-service-img
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      - kafka
+  order-service-consumer-img:
+    image: akshaytakale07/testrepo:latest
+    container_name: order-service-consumer-img
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      - kafka
+  order-service-gateway-img:
+    image: hemantv9/order-service-gateway:latest
+    container_name: order-service-gateway-img
+    ports:
+      - "4000:4000"
+    depends_on:
+      - consul
+      - order-service-img
+      - order-service-consumer-img
+    environment:
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CLOUD_GATEWAY_ROUTES[0]_URI: http://order-service-img:8080
+      SPRING_CLOUD_GATEWAY_ROUTES[0]_ID: OrderServiceMS
+      SPRING_CLOUD_GATEWAY_ROUTES[0]_PREDICATES[0]: Path= /app/**
+      SPRING_CLOUD_GATEWAY_ROUTES[1]_URI: http://order-service-consumer-img:8081
+      SPRING_CLOUD_GATEWAY_ROUTES[1]_ID: OrderServiceConsumerMS
+      SPRING_CLOUD_GATEWAY_ROUTES[1]_PREDICATES[0]: Path= /consumer/**
