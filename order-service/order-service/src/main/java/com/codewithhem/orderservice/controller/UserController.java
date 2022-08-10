@@ -17,7 +17,7 @@ public class UserController {
 
     @Autowired
     KafkaTemplate<String,User> userKafkaTemplate;
-
+    //This method will return list of users.
     @GetMapping("/all")
     public List<User> getAllUser() {
         return userService.getAllUser();
