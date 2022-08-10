@@ -17,7 +17,7 @@ public class OrderController {
 
     @Autowired
     KafkaTemplate<String, Order> orderKafkaTemplate;
-
+    //This method will place a new order.
     @PostMapping(value = "/create")
     public Order createOrder(@RequestBody OrderDTO orderDTO) {
         Order order = new Order();
@@ -26,10 +26,11 @@ public class OrderController {
         order.setStatus(orderDTO.getStatus());
         order.setUserId(orderDTO.getUserId());
         order=orderService.createOrder(order);
+        //send order object to OrderServiceConsumerMS through kafka topic.
         orderKafkaTemplate.send("OrderTopic", order);
         return order;
     }
-
+    //This method will return the list of orders.
     @GetMapping("/all")
     public List<Order> getOrders() {
         return orderService.getAllOrders();
