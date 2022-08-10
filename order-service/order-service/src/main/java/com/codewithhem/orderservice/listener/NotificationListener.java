@@ -16,12 +16,12 @@ public class NotificationListener {
 
     @Autowired
     OrderCRUD orderCRUD;
-
+    //recieves user updated by OrderServiceConsumerMS through kafka
     @KafkaListener(topics = "RevUserTopic", groupId = "group_user", containerFactory = "userKafkaListenerFactory")
     public void saveUpdatedUser(User user){
         userCRUD.save(user);
     }
-
+    //recieves order updated by OrderServiceConsumerMS through kafka
     @KafkaListener(topics = "RevOrderTopic", groupId = "group_order", containerFactory = "orderKafkaListenerFactory")
     public void saveUpdatedOrder(Order order){
         orderCRUD.save(order);
