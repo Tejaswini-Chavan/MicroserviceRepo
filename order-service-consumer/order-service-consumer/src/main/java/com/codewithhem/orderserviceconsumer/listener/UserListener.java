@@ -11,7 +11,8 @@ public class UserListener {
 
     @Autowired
     UserCRUD userCRUD;
-
+    
+    //recieves user object from OrderServiceMS through kafka
     @KafkaListener(topics = "UserTopic", groupId= "group_user" , containerFactory = "userKafkaListenerFactory")
     public User saveUser(User user){
         return userCRUD.save(user);
