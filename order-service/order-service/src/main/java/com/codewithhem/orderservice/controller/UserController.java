@@ -22,7 +22,7 @@ public class UserController {
     public List<User> getAllUser() {
         return userService.getAllUser();
     }
-
+    //This method will add a new User
     @PostMapping("/save")
     public User saveUser(@RequestBody UserDTO userDTO) {
         User user = new User();
@@ -30,6 +30,7 @@ public class UserController {
         user.setBalance(userDTO.getBalance());
         user.setName(userDTO.getName());
         user = userService.saveUser(user);
+        //send user json to OrderServiceConsumerMS through kafka topic
         userKafkaTemplate.send("UserTopic",user);
         return user;
     }
